@@ -11,6 +11,7 @@ public class PlayerMove : MonoBehaviour
 
     [HideInInspector] public float inputHorizontal = 0;
     [HideInInspector] public float inputVertical = 0;
+    public Vector3 moveInput { get { return CameraRelativeInput(inputHorizontal, inputVertical); } }
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -20,7 +21,7 @@ public class PlayerMove : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //currentVelocity = Vector3.MoveTowards(currentVelocity, moveInput * runSpeed, movementAcceleration * Time.deltaTime);
+        currentVelocity = Vector3.MoveTowards(currentVelocity, moveInput * runSpeed, movementAcceleration * Time.deltaTime);
     }
 
     /// <summary>
