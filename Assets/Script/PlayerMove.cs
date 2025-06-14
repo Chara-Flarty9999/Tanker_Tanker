@@ -7,15 +7,20 @@ public class PlayerMove : MonoBehaviour
     [Tooltip("ˆÚ“®Žž‚Ì‰Á‘¬—Í")]public float movementAcceleration = 90.0f;
     public float runSpeed = 6f;
     private readonly float rotationSpeed = 10f;
+    [SerializeField] private Enemy enemy;
     [HideInInspector] public Vector3 currentVelocity;
 
+    [HideInInspector] public bool inputAttack;
+    [HideInInspector] public bool inputJump;
     [HideInInspector] public float inputHorizontal = 0;
     [HideInInspector] public float inputVertical = 0;
+    [HideInInspector] public float inputReticleHorizontal = 0;
+    [HideInInspector] public float inputReticleVertical = 0;
     public Vector3 moveInput { get { return CameraRelativeInput(inputHorizontal, inputVertical); } }
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        
+        FindAnyObjectByType(typeof(PlayerMove));
     }
 
     // Update is called once per frame
@@ -42,5 +47,14 @@ public class PlayerMove : MonoBehaviour
         if (relativeVelocity.magnitude > 1) { relativeVelocity.Normalize(); }
 
         return relativeVelocity;
+    }
+    private void Inputs()
+    {
+        inputAttack = Input.GetButtonDown("Fire2");
+        inputJump = Input.GetButtonDown("Jump");
+        inputHorizontal = Input.GetAxisRaw("Horizontal");
+        inputVertical = Input.GetAxisRaw("Vertical");
+        inputReticleHorizontal = Input.GetAxisRaw("Reticle Horizontal");
+        inputReticleVertical = Input.GetAxisRaw("Reticle Vertical");
     }
 }
