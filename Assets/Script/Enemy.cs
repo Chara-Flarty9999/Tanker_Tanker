@@ -38,6 +38,12 @@ public class Enemy : MonoBehaviour
     [SerializeField, Tooltip("íeÇî≠éÀÇ∑ÇÈä‘äu")]
     private int turretBulletRate;
 
+    /// <summary>
+    /// çÇÇ¢íeìπÇ©í·Ç¢íeìπÇ©ÅB
+    /// </summary>
+    [SerializeField, Tooltip("ONÇÃèÍçáçÇÇ¢íeìπÇ…Ç»ÇÈ")]
+    private bool _highRange = false;
+
     float _turretRateTime = 0;
     GameObject _turretBase;
     GameObject _turretBarrel;
@@ -154,7 +160,8 @@ public class Enemy : MonoBehaviour
 
         float sqrt = Mathf.Sqrt(underSqrt);
         float lowAngle = Mathf.Atan2(v2 - sqrt, g * xz); // í·Ç¢íeìπ
-        float angle = lowAngle;
+        float highAngle = Mathf.Atan2(v2 + sqrt, g * xz); // çÇÇ¢íeìπ
+        float angle = _highRange ? highAngle : lowAngle;
 
         // direction (XZ plane)
         Vector3 dir = toTargetXZ.normalized;
