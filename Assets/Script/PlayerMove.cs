@@ -2,59 +2,67 @@ using UnityEngine;
 
 public class PlayerMove : MonoBehaviour
 {
+    private const float rotationSpeed = 2f;
 
     [Header("Movement")]
-    [Tooltip("移動時の加速力")]public float movementAcceleration = 90.0f;
-    public float runSpeed = 6f;
-    private readonly float rotationSpeed = 10f;
-    [SerializeField] private Enemy enemy;
-    [HideInInspector] public Vector3 currentVelocity;
+    
+    [Tooltip("移動時の加速力")]
+    public float movementAcceleration = 90.0f;
 
-    [HideInInspector] public bool inputAttack;
-    [HideInInspector] public bool inputJump;
-    [HideInInspector] public float inputHorizontal = 0;
-    [HideInInspector] public float inputVertical = 0;
-    [HideInInspector] public float inputReticleHorizontal = 0;
-    [HideInInspector] public float inputReticleVertical = 0;
-    public Vector3 moveInput { get { return CameraRelativeInput(inputHorizontal, inputVertical); } }
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    [SerializeField] private Enemy enemy;
+    [SerializeField] private InputBuffer _inputBuffer;
+
+    Rigidbody _parentRigidBody;
     void Start()
     {
-        FindAnyObjectByType(typeof(PlayerMove));
+        if (transform.parent.TryGetComponent<Rigidbody>(out var rb))
+        {
+            _parentRigidBody = rb;
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
-        currentVelocity = Vector3.MoveTowards(currentVelocity, moveInput * runSpeed, movementAcceleration * Time.deltaTime);
+        var dir = CameraRelativeInput();
+
+        if (!Mathf.Approximately(dir.magnitude, 0f))
+        {
+            _parentRigidBody.AddForce(dir * movementAcceleration);
+        }
+
+        RotateTowardsMovementDir();
     }
 
     /// <summary>
     /// Movement based off camera facing.
     /// </summary>
-    private Vector3 CameraRelativeInput(float inputX, float inputZ)
+    private Vector3 CameraRelativeInput()
     {
-        // Forward vector relative to the camera along the x-z plane.  
-        Vector3 forward = Camera.main.transform.TransformDirection(Vector3.forward);
+        // XZ平面上のカメラの前方ベクトルを取得します。
+        Vector3 forward = Camera.main.transform.forward;//directionをローカル空間からワールド空間へ変換する。
         forward.y = 0;
         forward = forward.normalized;
 
-        // Right vector relative to the camera always orthogonal to the forward vector.
-        Vector3 right = new Vector3(forward.z, 0, -forward.x);
-        Vector3 relativeVelocity = inputHorizontal * right + inputVertical * forward;
+        // カメラに対する右ベクトルは常に前方ベクトルに対して直交します…らしい
+        Vector3 right = new Vector3(forward.z, 0, -forward.x);//正面ベクトルから右ベクトルがこれで取れるぞ
+        Vector3 relativeDirection =
+            _inputBuffer.inputHorizontal * right + _inputBuffer.inputVertical * forward;
 
         // Reduce input for diagonal movement.
-        if (relativeVelocity.magnitude > 1) { relativeVelocity.Normalize(); }
+        if (relativeDirection.magnitude > 1) { relativeDirection.Normalize(); }
 
-        return relativeVelocity;
+        return relativeDirection;
     }
-    private void Inputs()
+    private void RotateTowardsMovementDir()
     {
-        inputAttack = Input.GetButtonDown("Fire2");
-        inputJump = Input.GetButtonDown("Jump");
-        inputHorizontal = Input.GetAxisRaw("Horizontal");
-        inputVertical = Input.GetAxisRaw("Vertical");
-        inputReticleHorizontal = Input.GetAxisRaw("Reticle Horizontal");
-        inputReticleVertical = Input.GetAxisRaw("Reticle Vertical");
+        var moveDir = CameraRelativeInput();
+
+        if (moveDir!= Vector3.zero)
+        {
+            transform.rotation = Quaternion.Slerp(transform.rotation, 
+                Quaternion.LookRotation(moveDir), 
+                Time.deltaTime * rotationSpeed);
+        }
     }
 }
