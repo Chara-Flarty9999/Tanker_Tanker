@@ -12,31 +12,31 @@ public class Enemy : MonoBehaviour
     /// 射出するオブジェクト
     /// </summary>
     [SerializeField, Tooltip("射出するオブジェクトをここに割り当てる(Normal以外)")]
-    private GameObject throwingObject;
+    private GameObject _throwingObject;
 
     /// <summary>
     /// 標的のオブジェクト
     /// </summary>
     [SerializeField, Tooltip("標的のオブジェクトをここに割り当てる(Normal以外)")]
-    private GameObject targetObject;
+    private GameObject _targetObject;
 
     /// <summary>
     /// 射出角度
     /// </summary>
     [SerializeField, Tooltip("射出する速度(Turretのみ)")]
-    private float projectileSpeed = 20f;
+    private float _projectileSpeed = 20f;
 
     /// <summary>
     /// 射出する座標のオブジェクト
     /// </summary>
     [SerializeField, Tooltip("射出する座標(Turretのみ)")]
-    private Transform turretMuzzle;
+    private Transform _turretMuzzle;
 
     /// <summary>
     /// 射出する座標のオブジェクト
     /// </summary>
     [SerializeField, Tooltip("弾を発射する間隔")]
-    private int turretBulletRate;
+    private int _turretBulletRate;
 
     /// <summary>
     /// 高い弾道か低い弾道か。
@@ -56,27 +56,26 @@ public class Enemy : MonoBehaviour
     Rigidbody rb;
     MeshRenderer mesh;
     SpriteRenderer spriteRenderer;
-    GameObject enemyLifeGage;
-    GameObject enemyCanvas;
-    Image gage_image;
+    GameObject _enemyLifeGage;
+    GameObject _enemyCanvas;
+    Image _gage_image;
 
 
     // Start is called before the first frame update
     void Start()
     {
         _enemyLife = _maxEenemyLife;
-        enemyLifeGage = transform.Find("Canvas/EnemyLifeGageRoot/EnemyLifeGage").gameObject;
+        _enemyLifeGage = transform.Find("Canvas/EnemyLifeGageRoot/EnemyLifeGage").gameObject;
         
         if (_enemyType == EnemyType.Turret) // タレット状態の時のみ取得する。
         {
-            targetObject = GameObject.Find("Sana.Airsky_Sorceress");
             _turretBase = transform.Find("TurretBase").gameObject;
             _turretBarrel = transform.Find("TurretBase/TurretBarrelBase").gameObject;
         }
-        enemyCanvas = transform.GetChild(0).gameObject;
-        gage_image = enemyLifeGage.GetComponent<Image>();
+        _enemyCanvas = transform.GetChild(0).gameObject;
+        _gage_image = _enemyLifeGage.GetComponent<Image>();
         rb = GetComponent<Rigidbody>();
-        enemyCanvas.SetActive(false);
+        _enemyCanvas.SetActive(false);
     }
 
     // Update is called once per frame
@@ -85,21 +84,19 @@ public class Enemy : MonoBehaviour
         switch (_enemyType)
         {
             case EnemyType.Turret:
-                Vector3 dirToTarget = targetObject.transform.position - _turretBase.transform.position;
+                Vector3 dirToTarget = _targetObject.transform.position - _turretBase.transform.position;
                 Vector3 flatDir = new Vector3(dirToTarget.x, 0f, dirToTarget.z);
                 _turretBase.transform.rotation = Quaternion.LookRotation(flatDir);
 
                 Vector3 firingDirection;
 
                 //TryCalculateBallisticVelocity
-                if (TryGetVelocity(this.transform.position, targetObject.transform.position, projectileSpeed, out firingDirection))
+                if (TryGetVelocity(this.transform.position, _targetObject.transform.position, _projectileSpeed, out firingDirection))
                 {
                     // barrelのforwardをfiringDirectionに近づける（X軸のみ変化）
                     Quaternion aimRotation = Quaternion.LookRotation(firingDirection);
-                    //Debug.DrawRay(_turretBase.transform.position, firingDirection * 10f, Color.red, 2f);
                     Vector3 euler = aimRotation.eulerAngles;
                     _enemyBulletDirection = firingDirection;
-                    //DrawTrajectory(_turretBarrel.transform.position, firingDirection);
                     // 回転制限: X軸だけ、YとZを固定
                     _turretBarrel.transform.rotation = Quaternion.LookRotation(firingDirection);
 
@@ -109,17 +106,11 @@ public class Enemy : MonoBehaviour
                     }
                     _turretRateTime += Time.deltaTime;
 
-                    if (_turretRateTime > turretBulletRate)
+                    if (_turretRateTime > _turretBulletRate)
                     {
                         _turretRateTime = 0;
                     }
                 }
-
-
-                /*_turretBase.transform.LookAt(targetObject.transform.position);
-                float saveRotateY = _turretBase.transform.rotation.y;
-                float saveRotateW = _turretBase.transform.rotation.w;
-                _turretBase.transform.rotation = new Quaternion(throwingAngle, saveRotateY, 0, saveRotateW);*/
                 break;
         }
     }
@@ -171,15 +162,14 @@ public class Enemy : MonoBehaviour
         velocity = dir * -1 * speed * Mathf.Cos(angle) + Vector3.up * speed * Mathf.Sin(angle);
 
         Debug.DrawRay(origin, velocity, Color.cyan, 2f);
-        //velocity = Quaternion.AngleAxis(Mathf.Rad2Deg * angle, Vector3.Cross(dir, Vector3.up)) * dir * speed;
         return true;
     }
 
     public void DealDamage_Heal(int change_HP)
     {
-        enemyCanvas?.SetActive(true);
+        _enemyCanvas?.SetActive(true);
         _enemyLife += change_HP;
-        gage_image.fillAmount = _enemyLife / _maxEenemyLife;
+        _gage_image.fillAmount = _enemyLife / _maxEenemyLife;
         //mesh.material.color = change_HP >= 0 ? new Color(0, 1, 0, 1) : new Color(1, 0, 0, 1);
         if (_enemyLife <= 0)
         {
@@ -196,14 +186,14 @@ public class Enemy : MonoBehaviour
     /// </summary>
     private void ThrowingBall(Vector3 shootVector)
     {
-        if (throwingObject != null && targetObject != null && _enemyType == EnemyType.Turret)
+        if (_throwingObject != null && _targetObject != null && _enemyType == EnemyType.Turret)
         {
             // Ballオブジェクトの生成
-            GameObject ball = Instantiate(throwingObject, turretMuzzle.position, Quaternion.identity);
+            GameObject ball = Instantiate(_throwingObject, _turretMuzzle.position, Quaternion.identity);
 
             // 射出
             Rigidbody rid = ball.GetComponent<Rigidbody>();
-            rid.angularVelocity = shootVector;
+            rid.linearVelocity = shootVector;
         }
         else
         {
