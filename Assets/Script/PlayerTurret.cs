@@ -1,42 +1,29 @@
 using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro.EditorUtilities;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class PlayerTurret : MonoBehaviour
 {
-    [Header("タレット専用の設定")]
-    /// <summary>
-    /// 射出するオブジェクト
-    /// </summary>
-    [SerializeField, Tooltip("射出するオブジェクトをここに割り当てる(Normal以外)")]
-    private GameObject throwingObject;
+    [Header("タレットの設定")]
 
-    /// <summary>
-    /// 標的のオブジェクト
-    /// </summary>
-    [SerializeField, Tooltip("標的のオブジェクトをここに割り当てる(Normal以外)")]
-    private GameObject targetObject;
+    [SerializeField, Tooltip("射出するオブジェクトをここに割り当てる")]
+    private GameObject _throwingObject;
 
-    /// <summary>
-    /// 射出角度
-    /// </summary>
-    [SerializeField, Tooltip("射出する速度(Turretのみ)")]
-    private float projectileSpeed = 20f;
+    [SerializeField, Tooltip("射出する速度")]
+    private float _projectileSpeed = 20f;
 
-    /// <summary>
-    /// 射出する座標のオブジェクト
-    /// </summary>
-    [SerializeField, Tooltip("射出する座標(Turretのみ)")]
-    private Transform turretMuzzle;
+    [SerializeField, Tooltip("射出する座標")]
+    private Transform _turretMuzzle;
 
-    /// <summary>
-    /// 射出する座標のオブジェクト
-    /// </summary>
-    [SerializeField, Tooltip("弾を発射する間隔")]
-    private int turretBulletRate;
+    [SerializeField, Tooltip("発射インターバル")]
+    private int _turretShotCooldown;
+
+    [SerializeField,Tooltip("照準感度")]
+    private float _reticleSensitivity = 5.0f;
 
     /// <summary>
     /// 高い弾道か低い弾道か。
@@ -45,133 +32,86 @@ public class PlayerTurret : MonoBehaviour
     private bool _highRange = false;
 
     float _turretRateTime = 0;
-    GameObject _turretBase;
-    GameObject _turretBarrel;
-    Vector3 _enemyBulletDirection;
-
+    [SerializeField] GameObject _turretBase;
+    [SerializeField] GameObject _turretBarrel;
+    
     [Header("共通設定")]
     [SerializeField] float _maxEenemyLife = 20;
-    [SerializeField] EnemyType _enemyType;
+    //[SerializeField] EnemyType _enemyType;
     float _enemyLife;
-    Rigidbody rb;
-    MeshRenderer mesh;
-    SpriteRenderer spriteRenderer;
-    GameObject enemyLifeGage;
     GameObject enemyCanvas;
     Image gage_image;
+    Vector3 _firingDirection;
+    [SerializeField] private InputBuffer _inputBuffer;
 
 
     // Start is called before the first frame update
     void Start()
-    {
-        _enemyLife = _maxEenemyLife;
-        enemyLifeGage = transform.Find("Canvas/EnemyLifeGageRoot/EnemyLifeGage").gameObject;
-        
-        if (_enemyType == EnemyType.Turret) // タレット状態の時のみ取得する。
-        {
-            _turretBase = transform.Find("TurretBase").gameObject;
-            _turretBarrel = transform.Find("TurretBase/TurretBarrelBase").gameObject;
-        }
-        enemyCanvas = transform.GetChild(0).gameObject;
-        gage_image = enemyLifeGage.GetComponent<Image>();
-        rb = GetComponent<Rigidbody>();
-        enemyCanvas.SetActive(false);
+    {   
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        switch (_enemyType)
+        GetVelocity(_turretBarrel.transform.forward, _turretBarrel.transform.rotation.eulerAngles.x, _projectileSpeed, out _firingDirection);
+
+        // 回転制限: X軸だけ、YとZを固定
+
+
+        _turretRateTime += Time.deltaTime;
+
+        if (_inputBuffer.inputAttack)
         {
-            case EnemyType.Turret:
-                Vector3 dirToTarget = targetObject.transform.position - _turretBase.transform.position;
-                Vector3 flatDir = new Vector3(dirToTarget.x, 0f, dirToTarget.z);
-                _turretBase.transform.rotation = Quaternion.LookRotation(flatDir);
 
-                Vector3 firingDirection;
+            if (_turretRateTime > _turretShotCooldown)
+            {
+                _turretRateTime = 0;
+            }
 
-                //TryCalculateBallisticVelocity
-                if (TryGetVelocity(this.transform.position, targetObject.transform.position, projectileSpeed, out firingDirection))
-                {
-                    // barrelのforwardをfiringDirectionに近づける（X軸のみ変化）
-                    Quaternion aimRotation = Quaternion.LookRotation(firingDirection);
-                    //Debug.DrawRay(_turretBase.transform.position, firingDirection * 10f, Color.red, 2f);
-                    Vector3 euler = aimRotation.eulerAngles;
-                    _enemyBulletDirection = firingDirection;
-                    //DrawTrajectory(_turretBarrel.transform.position, firingDirection);
-                    // 回転制限: X軸だけ、YとZを固定
-                    _turretBarrel.transform.rotation = Quaternion.LookRotation(firingDirection);
-
-                    if (_turretRateTime == 0)
-                    {
-                        ThrowingBall(firingDirection);
-                    }
-                    _turretRateTime += Time.deltaTime;
-
-                    if (_turretRateTime > turretBulletRate)
-                    {
-                        _turretRateTime = 0;
-                    }
-                }
-
-
-                /*_turretBase.transform.LookAt(targetObject.transform.position);
-                float saveRotateY = _turretBase.transform.rotation.y;
-                float saveRotateW = _turretBase.transform.rotation.w;
-                _turretBase.transform.rotation = new Quaternion(throwingAngle, saveRotateY, 0, saveRotateW);*/
-                break;
+            if (_turretRateTime == 0)
+            {
+                ThrowingBall(_firingDirection);
+            }
         }
+        DrawTrajectory(_turretBarrel.transform.position, _firingDirection);
     }
 
-    private void FixedUpdate()
+    void FixedUpdate()
     {
-        
+        Debug.Log(_inputBuffer.inputReticleHorizontal + " " + _inputBuffer.inputReticleVertical);
+        _turretBase.transform.localRotation = Quaternion.Euler(0, _turretBase.transform.localRotation.eulerAngles.y + _inputBuffer.inputReticleHorizontal * _reticleSensitivity, 0);
+
+        float barrelAngle = _turretBarrel.transform.localRotation.eulerAngles.x + _inputBuffer.inputReticleVertical * _reticleSensitivity;
+
+        _turretBarrel.transform.localRotation = 
+            Quaternion.Euler(Mathf.Clamp(barrelAngle, 0, 180), 0, 0);
     }
     /// <summary>
     /// 自身から対象への距離を測定し、一定の速度で弾が対象に届く向きベクトルを検索する。
     /// 平たく言うと斜方投射の改造。
     /// </summary>
-    /// <param name="origin">射出場所</param>
-    /// <param name="target">設定された標的</param>
+    /// <param name="direction">射出するXZ平面の角度</param>
+    /// <param name="barrelAngleDeg">バレルの仰角</param>
     /// <param name="speed">射出速度</param>
-    /// <param name="velocity">設定された射出速度で弾が対象に届くような向きベクトル</param>
-    /// <returns>対象に届くか否かをBool型で返す。ついでにベクトルを出力する。</returns>
-    bool TryGetVelocity(Vector3 origin, Vector3 target, float speed, out Vector3 velocity)
+    /// <param name="velocity">最終的なベクトル</param>
+    /// <returns>ベクトルを出力する。</returns>
+    void GetVelocity(Vector3 direction, float barrelAngleDeg, float speed, out Vector3 velocity)
     {
-        
-        
-        Vector3 toTarget = target - origin;
-        Vector3 toTargetXZ = new Vector3(toTarget.x, 0, toTarget.z);
-        float y = toTarget.y;
-        float xz = toTargetXZ.magnitude;
-        //ここまでで自分からターゲットまでの距離を測る。
-
+        float y = direction.y; // Y成分を取得
+        float xz = new Vector3(direction.x, 0, direction.z).magnitude;// XZ平面上の成分を取得
         float g = Physics.gravity.y;
-
         float v2 = speed * speed;
-        float underSqrt = v2 * v2 - g * (g * xz * xz + 2 * y * v2);
+        float sqrt = Mathf.Sqrt(v2 * v2 - g * (g * xz * xz + 2 * y * v2));
 
-        if (underSqrt < 0)
-        {
-            velocity = Vector3.zero;
-            return false; // 到達不能
-        }
+        direction = new Vector3(direction.x, 0, direction.z).normalized; // Y軸を無視してXZ平面上の方向を取得
+        float barrelAngleRad = barrelAngleDeg * Mathf.Deg2Rad; // 角度をラジアンに変換 
+        Debug.Log($"Barrel Angle: {barrelAngleDeg} degrees, {barrelAngleRad} radians");
+        Debug.DrawRay(transform.position, direction, Color.yellow, 2f);
 
-        float sqrt = Mathf.Sqrt(underSqrt);
-        float lowAngle = Mathf.Atan2(v2 - sqrt, g * xz); // 低い弾道
-        float highAngle = Mathf.Atan2(v2 + sqrt, g * xz); // 高い弾道
-        float angle = _highRange ? highAngle : lowAngle;
+        velocity = Mathf.Cos(barrelAngleRad) * speed * direction * -1 + Vector3.up * speed * Mathf.Sin(barrelAngleRad);
 
-        // direction (XZ plane)
-        Vector3 dir = toTargetXZ.normalized;
-
-        Debug.DrawRay(origin, dir, Color.yellow, 2f);
-
-        velocity = dir * -1 * speed * Mathf.Cos(angle) + Vector3.up * speed * Mathf.Sin(angle);
-
-        Debug.DrawRay(origin, velocity, Color.cyan, 2f);
-        //velocity = Quaternion.AngleAxis(Mathf.Rad2Deg * angle, Vector3.Cross(dir, Vector3.up)) * dir * speed;
-        return true;
+        Debug.DrawRay(_turretMuzzle.transform.position, velocity, Color.cyan, 2f);
     }
 
     public void DealDamage_Heal(int change_HP)
@@ -195,25 +135,18 @@ public class PlayerTurret : MonoBehaviour
     /// </summary>
     private void ThrowingBall(Vector3 shootVector)
     {
-        if (throwingObject != null && targetObject != null && _enemyType == EnemyType.Turret)
+        if (_throwingObject != null)
         {
             // Ballオブジェクトの生成
-            GameObject ball = Instantiate(throwingObject, turretMuzzle.position, Quaternion.identity);
+            GameObject ball = Instantiate(_throwingObject, _turretMuzzle.position, Quaternion.identity);
 
             // 射出
             Rigidbody rid = ball.GetComponent<Rigidbody>();
-            rid.angularVelocity = shootVector;
+            rid.AddForce(shootVector,ForceMode.Impulse);
         }
         else
         {
-            if (_enemyType != EnemyType.Turret)
-            {
-                throw new System.Exception("タレットではないため発射できません。");
-            }
-            else
-            {
                 throw new System.Exception("射出するオブジェクトまたは標的のオブジェクトが未設定です。");
-            }
         }
     }
     private void OnDestroy()
