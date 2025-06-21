@@ -6,13 +6,7 @@ using UnityEngine.UI;
 public class EnemyHP_Billbord : MonoBehaviour
 {
     [SerializeField]
-    private Transform target = default;
-    [SerializeField]
-    private Image arrow = default;
-
-    GameObject playerCamera;
-    private Camera mainCamera;
-    private RectTransform rectTransform;
+    private Transform _target = default;
 
     void Update()
     {
