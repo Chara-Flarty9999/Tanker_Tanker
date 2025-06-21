@@ -20,7 +20,7 @@ public class OutSide_Explode_DamageHit : MonoBehaviour
 
     private void OnTriggerEnter(Collider collision)
     {
-
+        Debug.Log("Collision with: " + collision.gameObject.name);
         if (collision.gameObject.tag == "Enemy")
         {
             Enemy enemydata = collision.gameObject.GetComponent<Enemy>();
