@@ -106,7 +106,6 @@ public class PlayerTurret : MonoBehaviour
 
         direction = new Vector3(direction.x, 0, direction.z).normalized; // Y²‚ğ–³‹‚µ‚ÄXZ•½–Êã‚Ì•ûŒü‚ğæ“¾
         float barrelAngleRad = barrelAngleDeg * Mathf.Deg2Rad; // Šp“x‚ğƒ‰ƒWƒAƒ“‚É•ÏŠ· 
-        Debug.Log($"Barrel Angle: {barrelAngleDeg} degrees, {barrelAngleRad} radians");
         Debug.DrawRay(transform.position, direction, Color.yellow, 2f);
 
         velocity = Mathf.Cos(barrelAngleRad) * speed * direction * -1 + Vector3.up * speed * Mathf.Sin(barrelAngleRad);
