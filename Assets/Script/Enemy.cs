@@ -130,8 +130,6 @@ public class Enemy : MonoBehaviour
     /// <returns>対象に届くか否かをBool型で返す。ついでにベクトルを出力する。</returns>
     bool TryGetVelocity(Vector3 origin, Vector3 target, float speed, out Vector3 velocity)
     {
-        
-        
         Vector3 toTarget = target - origin;
         Vector3 toTargetXZ = new Vector3(toTarget.x, 0, toTarget.z);
         float y = toTarget.y;
