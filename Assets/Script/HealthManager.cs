@@ -2,6 +2,8 @@ using UnityEngine;
 
 public class HealthManager : MonoBehaviour
 {
+
+    [SerializeField]private EnemyStatusSettings enemyStatusSettings;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -11,6 +13,6 @@ public class HealthManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 }

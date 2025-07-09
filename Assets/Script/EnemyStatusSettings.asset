@@ -15,14 +15,27 @@ MonoBehaviour:
   EnemyParamList:
   - tankID: assalt_Cannon
     tankName: Assalt Tank
+    prefab: {fileID: 0}
     maxHP: 60
     maxMoveSpeed: 0
     weaponType: 1
     weaponFireRate: 0
     attackRange: 0
     behaviorType: 0
+    rewardScore: 0
     isSelfDestruct: 0
     isStationary: 0
-    rewardScore: 0
+    specialFlags: 0
+  - tankID: assalt_MacineGun
+    tankName: Assalt Tank
     prefab: {fileID: 0}
+    maxHP: 60
+    maxMoveSpeed: 0
+    weaponType: 2
+    weaponFireRate: 0
+    attackRange: 0
+    behaviorType: 0
+    rewardScore: 0
+    isSelfDestruct: 0
+    isStationary: 0
     specialFlags: 0
