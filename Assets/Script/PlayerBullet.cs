@@ -1,15 +1,10 @@
-using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
-using TMPro.EditorUtilities;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class PlayerTurret : MonoBehaviour
+public class PlayerBullet : MonoBehaviour
 {
-    [Header("タレットの設定")]
-
     [SerializeField, Tooltip("射出するオブジェクトをここに割り当てる")]
     private GameObject _throwingObject;
 
@@ -22,7 +17,7 @@ public class PlayerTurret : MonoBehaviour
     [SerializeField, Tooltip("発射インターバル")]
     private int _turretShotCooldown;
 
-    [SerializeField,Tooltip("照準感度")]
+    [SerializeField, Tooltip("照準感度")]
     private float _reticleSensitivity = 5.0f;
 
     /// <summary>
@@ -34,12 +29,8 @@ public class PlayerTurret : MonoBehaviour
     float _turretRateTime = 0;
     [SerializeField] GameObject _turretBase;
     [SerializeField] GameObject _turretBarrel;
-    
-    [Header("共通設定")]
-    [SerializeField] float _maxEenemyLife = 20;
-    //[SerializeField] EnemyType _enemyType;
     float _enemyLife;
-    GameObject enemyCanvas;
+    GameObject _enemyCanvas;
     Image gage_image;
     Vector3 _firingDirection;
     [SerializeField] private InputBuffer _inputBuffer;
@@ -47,7 +38,7 @@ public class PlayerTurret : MonoBehaviour
 
     // Start is called before the first frame update
     void Start()
-    {   
+    {
 
     }
 
@@ -79,12 +70,11 @@ public class PlayerTurret : MonoBehaviour
 
     void FixedUpdate()
     {
-        Debug.Log(_inputBuffer.inputReticleHorizontal + " " + _inputBuffer.inputReticleVertical);
         _turretBase.transform.localRotation = Quaternion.Euler(0, _turretBase.transform.localRotation.eulerAngles.y + _inputBuffer.inputReticleHorizontal * _reticleSensitivity, 0);
 
         float barrelAngle = _turretBarrel.transform.localRotation.eulerAngles.x + _inputBuffer.inputReticleVertical * _reticleSensitivity;
 
-        _turretBarrel.transform.localRotation = 
+        _turretBarrel.transform.localRotation =
             Quaternion.Euler(Mathf.Clamp(barrelAngle, 0, 180), 0, 0);
     }
     /// <summary>
@@ -113,21 +103,6 @@ public class PlayerTurret : MonoBehaviour
         Debug.DrawRay(_turretMuzzle.transform.position, velocity, Color.cyan, 2f);
     }
 
-    public void DealDamage_Heal(int change_HP)
-    {
-        enemyCanvas?.SetActive(true);
-        _enemyLife += change_HP;
-        gage_image.fillAmount = _enemyLife / _maxEenemyLife;
-        //mesh.material.color = change_HP >= 0 ? new Color(0, 1, 0, 1) : new Color(1, 0, 0, 1);
-        if (_enemyLife <= 0)
-        {
-            Destroy(gameObject, 1f);
-        }
-        else
-        {
-            //mesh.material.DOColor(new Color(1, 1, 1), 0.8f);
-        }
-    }
 
     /// <summary>
     /// ボールを射出する
@@ -138,16 +113,25 @@ public class PlayerTurret : MonoBehaviour
         {
             // Ballオブジェクトの生成
             GameObject ball = Instantiate(_throwingObject, _turretMuzzle.position, Quaternion.identity);
+            Collider collider = ball.GetComponent<SphereCollider>();
+            StartCoroutine(SwitchTrigger(0.25f, collider));
 
             // 射出
             Rigidbody rid = ball.GetComponent<Rigidbody>();
-            rid.AddForce(shootVector,ForceMode.Impulse);
+            rid.AddForce(shootVector, ForceMode.Impulse);
         }
         else
         {
-                throw new System.Exception("射出するオブジェクトまたは標的のオブジェクトが未設定です。");
+            throw new System.Exception("射出するオブジェクトまたは標的のオブジェクトが未設定です。");
         }
     }
+
+    IEnumerator SwitchTrigger(float delay, Collider collider)
+    {
+        yield return new WaitForSeconds(delay);
+        collider.enabled = true;
+    }
+
     private void OnDestroy()
     {
         GameManager.leftEnemyBox--;

@@ -9,7 +9,7 @@ public class PlayerMove : MonoBehaviour
     [Tooltip("ˆÚ“®Žž‚Ì‰Á‘¬—Í")]
     public float movementAcceleration = 90.0f;
 
-    [SerializeField] private Enemy enemy;
+    [SerializeField] private EnemyBullet enemy;
     [SerializeField] private InputBuffer _inputBuffer;
 
     Rigidbody _parentRigidBody;
