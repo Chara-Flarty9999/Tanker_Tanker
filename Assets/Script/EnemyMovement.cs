@@ -38,16 +38,18 @@ public class EnemyMovement : MonoBehaviour
                 break;
 
             case Enums.BehaviorType.Tactical:
+                Vector3 targetPosition = Vector3.zero;
                 if (Vector3.Distance(transform.position, _player.transform.position) > _param.AttackRange)
                 {
                     // プレイヤーとの距離が攻撃範囲より大きい場合、近づく
-                    _navAgent.SetDestination(_player.position);
+                    targetPosition = _player.position;
                 }
                 else
                 {
-                    // プレイヤーとの距離が攻撃範囲以内の場合、停止する
-                    _navAgent.SetDestination(transform.position);
+                    // プレイヤーとの距離が攻撃範囲以内の場合、後退する
+                    targetPosition = transform.position - (_player.position - transform.position).normalized * Vector3.Distance(transform.position, _player.transform.position); // 後退する距離
                 }
+                _navAgent.SetDestination(targetPosition);
                 break;
 
             case Enums.BehaviorType.Mouse:

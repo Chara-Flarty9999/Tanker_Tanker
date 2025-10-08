@@ -15,7 +15,3 @@ MonoBehaviour:
   SpawnParamList:
   - spawnTankID: Tactical_Cannon
     spawnArea: {x: 0, y: 0, z: 0}
-  - spawnTankID: Assault_Cannon
-    spawnArea: {x: -5, y: 0, z: 10}
-  - spawnTankID: Assault_Cannon
-    spawnArea: {x: 5, y: 0, z: 10}

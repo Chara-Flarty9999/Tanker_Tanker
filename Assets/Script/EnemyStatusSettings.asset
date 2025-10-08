@@ -44,7 +44,7 @@ MonoBehaviour:
     _maxMoveSpeed: 6
     _weaponType: 1
     _weaponFireRate: 5
-    _attackRange: 5
+    _attackRange: 10
     _behaviorType: 2
     _rewardScore: 100
     _isSelfDestruct: 0
