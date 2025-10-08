@@ -1,22 +1,20 @@
 using DG.Tweening;
 using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
-    private float HP {get; set;}
+    private float HP { get; set; }
     int maxEnemyBox = 0;
     public static int leftEnemyBox = 0;
     [SerializeField] private float MaxHP = 10;
     [SerializeField] GameObject lifeGage;
     [SerializeField] GameObject charaImg;
-    [SerializeField] GameObject spawner; 
+    [SerializeField] GameObject spawner;
     [SerializeField] GameObject bulletTypeUI;
     [SerializeField] GameObject leftEnemyTextObject;
     [SerializeField] GameObject getTimeTextObject;
@@ -53,10 +51,10 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         time += Time.deltaTime;
-        maxEnemyBox = GameObject.FindGameObjectsWithTag("Enemy").Length;
+        maxEnemyBox = GameObject.FindGameObjectsWithTag("EnemyBullet").Length;
         leftEnemyBox = maxEnemyBox;
         HP = MaxHP;
-        leftEnemyBoxText =leftEnemyTextObject.GetComponent<TextMeshProUGUI>();
+        leftEnemyBoxText = leftEnemyTextObject.GetComponent<TextMeshProUGUI>();
         timeText = getTimeTextObject.GetComponent<TextMeshProUGUI>();
         clearText = clearTextObject.GetComponent<TextMeshProUGUI>();
         lifeImage = lifeGage.GetComponent<Image>();
@@ -71,10 +69,10 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.LeftShift)) 
+        if (Input.GetKeyDown(KeyCode.LeftShift))
         {
             audioSource.PlayOneShot(typeChangeSound);
-            if(bulletType == BulletType.Explode)
+            if (bulletType == BulletType.Explode)
             {
                 bulletType = BulletType.Normal;
             }
@@ -86,13 +84,13 @@ public class GameManager : MonoBehaviour
         switch (bulletType)
         {
             case BulletType.Normal:
-                BulletTypeImage.color = new Color(1,1,1,1);
+                BulletTypeImage.color = new Color(1, 1, 1, 1);
                 break;
             case BulletType.Penetration:
-                BulletTypeImage.color = new Color(0.2f,0.4f,1,1);
+                BulletTypeImage.color = new Color(0.2f, 0.4f, 1, 1);
                 break;
             case BulletType.Explode:
-                BulletTypeImage.color = new Color(1,0.4f,0.2f,1);
+                BulletTypeImage.color = new Color(1, 0.4f, 0.2f, 1);
                 break;
         }
         if (!cleared)
@@ -100,7 +98,7 @@ public class GameManager : MonoBehaviour
             time += Time.deltaTime;
         }
         leftEnemyBoxText.SetText(leftEnemyBox.ToString() + " / " + maxEnemyBox.ToString());
-        timeText.SetText("TIME : {0}",Mathf.Round(time * 100.0f)/100);
+        timeText.SetText("TIME : {0}", Mathf.Round(time * 100.0f) / 100);
 
         if (leftEnemyBox <= 0)
         {
@@ -114,13 +112,13 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void GetDamage_Heal(int change_HP) 
+    public void GetDamage_Heal(int change_HP)
     {
         HP += change_HP;
-        characterImage.color = change_HP >= 0 ? new Color(0, 1, 0, 1): new Color(1, 0, 0, 1);
-        if (HP > MaxHP) {  HP = MaxHP; }
-        lifeImage.fillAmount = HP/MaxHP;
-        characterImage.DOColor(new Color(1,1,1), 0.8f);
+        characterImage.color = change_HP >= 0 ? new Color(0, 1, 0, 1) : new Color(1, 0, 0, 1);
+        if (HP > MaxHP) { HP = MaxHP; }
+        lifeImage.fillAmount = HP / MaxHP;
+        characterImage.DOColor(new Color(1, 1, 1), 0.8f);
     }
 
     public void BulletShoot()

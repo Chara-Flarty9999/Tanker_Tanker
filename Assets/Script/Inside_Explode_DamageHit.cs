@@ -25,14 +25,13 @@ public class Inside_Explode_DamageHit : MonoBehaviour
 
         if (collision.gameObject.tag == "Enemy")
         {
-            Enemy enemydata = collision.gameObject.GetComponent<Enemy>();
-            enemydata.DealDamage_Heal(-25);
+            HealthManager enemyHealth = collision.gameObject.GetComponent<HealthManager>();
+            enemyHealth.TakeDamage(-25);
         }
         if (collision.gameObject.tag == "Player")
         {
-            GameObject gameManager = GameObject.Find("GameManager");
-            GameManager manager = gameManager.GetComponent<GameManager>();
-            manager.GetDamage_Heal(-25);
+            HealthManager playerHealth = collision.gameObject.GetComponent<HealthManager>();
+            playerHealth.TakeDamage(-25);
         }
     }
     void AutoColliderDisable()
