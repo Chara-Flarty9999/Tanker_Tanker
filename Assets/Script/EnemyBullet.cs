@@ -4,53 +4,36 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
+using static UnityEditor.Experimental.GraphView.GraphView;
 
-public class Enemy : MonoBehaviour
+public class EnemyBullet : MonoBehaviour
 {
     [Header("タレット専用の設定")]
-    /// <summary>
-    /// 射出するオブジェクト
-    /// </summary>
     [SerializeField, Tooltip("射出するオブジェクトをここに割り当てる(Normal以外)")]
     private GameObject _throwingObject;
 
-    /// <summary>
-    /// 標的のオブジェクト
-    /// </summary>
     [SerializeField, Tooltip("標的のオブジェクトをここに割り当てる(Normal以外)")]
     private GameObject _targetObject;
 
-    /// <summary>
-    /// 射出角度
-    /// </summary>
     [SerializeField, Tooltip("射出する速度(Turretのみ)")]
     private float _projectileSpeed = 20f;
 
-    /// <summary>
-    /// 射出する座標のオブジェクト
-    /// </summary>
     [SerializeField, Tooltip("射出する座標(Turretのみ)")]
     private Transform _turretMuzzle;
 
-    /// <summary>
-    /// 射出する座標のオブジェクト
-    /// </summary>
     [SerializeField, Tooltip("弾を発射する間隔")]
-    private int _turretBulletRate;
+    private float _turretBulletRate;
 
-    /// <summary>
-    /// 高い弾道か低い弾道か。
-    /// </summary>
     [SerializeField, Tooltip("ONの場合高い弾道になる")]
     private bool _highRange = false;
 
     float _turretRateTime = 0;
-    GameObject _turretBase;
-    GameObject _turretBarrel;
+    [SerializeField] GameObject _turretBase;
+    [SerializeField] GameObject _turretBarrel;
     Vector3 _enemyBulletDirection;
 
     [Header("共通設定")]
-    [SerializeField] float _maxEenemyLife = 20;
+    [SerializeField] float _maxEnemyLife = 20;
     [SerializeField] EnemyType _enemyType;
     float _enemyLife;
     Rigidbody rb;
@@ -60,22 +43,20 @@ public class Enemy : MonoBehaviour
     GameObject _enemyCanvas;
     Image _gage_image;
 
+    EnemyParam _param;
+
 
     // Start is called before the first frame update
     void Start()
     {
-        _enemyLife = _maxEenemyLife;
+        _targetObject = GameObject.FindWithTag("Player");
+        _enemyLife = _maxEnemyLife;
         _enemyLifeGage = transform.Find("Canvas/EnemyLifeGageRoot/EnemyLifeGage").gameObject;
-        
-        if (_enemyType == EnemyType.Turret) // タレット状態の時のみ取得する。
-        {
-            _turretBase = transform.Find("TurretBase").gameObject;
-            _turretBarrel = transform.Find("TurretBase/TurretBarrelBase").gameObject;
-        }
+
         _enemyCanvas = transform.GetChild(0).gameObject;
         _gage_image = _enemyLifeGage.GetComponent<Image>();
         rb = GetComponent<Rigidbody>();
-        _enemyCanvas.SetActive(false);
+        _enemyCanvas.SetActive(true);
     }
 
     // Update is called once per frame
@@ -83,7 +64,7 @@ public class Enemy : MonoBehaviour
     {
         switch (_enemyType)
         {
-            case EnemyType.Turret:
+            case EnemyType.Cannon:
                 Vector3 dirToTarget = _targetObject.transform.position - _turretBase.transform.position;
                 Vector3 flatDir = new Vector3(dirToTarget.x, 0f, dirToTarget.z);
                 _turretBase.transform.rotation = Quaternion.LookRotation(flatDir);
@@ -95,7 +76,7 @@ public class Enemy : MonoBehaviour
                 {
                     // barrelのforwardをfiringDirectionに近づける（X軸のみ変化）
                     Quaternion aimRotation = Quaternion.LookRotation(firingDirection);
-                    Vector3 euler = aimRotation.eulerAngles;
+                    Vector3 eular = aimRotation.eulerAngles;
                     _enemyBulletDirection = firingDirection;
                     // 回転制限: X軸だけ、YとZを固定
                     _turretBarrel.transform.rotation = Quaternion.LookRotation(firingDirection);
@@ -167,7 +148,7 @@ public class Enemy : MonoBehaviour
     {
         _enemyCanvas?.SetActive(true);
         _enemyLife += change_HP;
-        _gage_image.fillAmount = _enemyLife / _maxEenemyLife;
+        _gage_image.fillAmount = _enemyLife / _maxEnemyLife;
         //mesh.material.color = change_HP >= 0 ? new Color(0, 1, 0, 1) : new Color(1, 0, 0, 1);
         if (_enemyLife <= 0)
         {
@@ -184,42 +165,48 @@ public class Enemy : MonoBehaviour
     /// </summary>
     private void ThrowingBall(Vector3 shootVector)
     {
-        if (_throwingObject != null && _targetObject != null && _enemyType == EnemyType.Turret)
+        if (_throwingObject != null && _targetObject != null)
         {
             // Ballオブジェクトの生成
             GameObject ball = Instantiate(_throwingObject, _turretMuzzle.position, Quaternion.identity);
-
+            Collider collider = ball.GetComponent<SphereCollider>();
+            StartCoroutine(SwitchTrigger(0.25f,collider));
             // 射出
             Rigidbody rid = ball.GetComponent<Rigidbody>();
             rid.linearVelocity = shootVector;
         }
         else
         {
-            if (_enemyType != EnemyType.Turret)
-            {
-                throw new System.Exception("タレットではないため発射できません。");
-            }
-            else
-            {
-                throw new System.Exception("射出するオブジェクトまたは標的のオブジェクトが未設定です。");
-            }
+
+            throw new System.Exception("射出するオブジェクトまたは標的のオブジェクトが未設定です。");
+
         }
     }
     private void OnDestroy()
     {
         GameManager.leftEnemyBox--;
     }
+    public void Initialize(EnemyParam enemyParam)
+    {
+        _param = enemyParam;
+        _turretBulletRate = _param.WeaponFireRate;
+    }
     /// <summary>
-    /// 敵の状態(敵種類)
+    /// 弾の状態
     /// </summary>
     enum EnemyType
     {
-        Object,
-        Turret,
+        Cannon,
+        MachineGun,
         Wander,
         chase
     }
 
+    IEnumerator SwitchTrigger(float delay, Collider collider)
+    {
+        yield return new WaitForSeconds(delay);
+        collider.enabled = true;
+    }
 
 
 

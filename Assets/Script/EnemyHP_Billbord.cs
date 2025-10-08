@@ -8,6 +8,10 @@ public class EnemyHP_Billbord : MonoBehaviour
     [SerializeField]
     private Transform _target = default;
 
+    private void Start()
+    {
+        _target = GameObject.FindWithTag("Player").transform;
+    }
     void Update()
     {
         Vector3 p = Camera.main.transform.position;

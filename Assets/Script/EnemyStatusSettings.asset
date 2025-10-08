@@ -12,30 +12,40 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b4b20e2df8866e64aa0fe240d0fc0c1d, type: 3}
   m_Name: EnemyStatusSettings
   m_EditorClassIdentifier: 
-  EnemyParamList:
-  - tankID: assalt_Cannon
-    tankName: Assalt Tank
-    prefab: {fileID: 0}
-    maxHP: 60
-    maxMoveSpeed: 0
-    weaponType: 1
-    weaponFireRate: 0
-    attackRange: 0
-    behaviorType: 0
-    rewardScore: 0
-    isSelfDestruct: 0
-    isStationary: 0
-    specialFlags: 0
-  - tankID: assalt_MacineGun
-    tankName: Assalt Tank
-    prefab: {fileID: 0}
-    maxHP: 60
-    maxMoveSpeed: 0
-    weaponType: 2
-    weaponFireRate: 0
-    attackRange: 0
-    behaviorType: 0
-    rewardScore: 0
-    isSelfDestruct: 0
-    isStationary: 0
-    specialFlags: 0
+  enemyParamList:
+  - _tankID: Assault_MachineGun
+    _tankName: Assault Tank
+    _prefab: {fileID: 0}
+    _maxHP: 50
+    _maxMoveSpeed: 10
+    _weaponType: 2
+    _weaponFireRate: 5
+    _attackRange: 3
+    _behaviorType: 0
+    _rewardScore: 100
+    _isSelfDestruct: 0
+    _specialFlags: 0
+  - _tankID: Assault_Cannon
+    _tankName: Assault Tank
+    _prefab: {fileID: 4470029899082457040, guid: 46900073924c66b4ca470fc2de0acb71, type: 3}
+    _maxHP: 50
+    _maxMoveSpeed: 6
+    _weaponType: 1
+    _weaponFireRate: 5
+    _attackRange: 5
+    _behaviorType: 0
+    _rewardScore: 100
+    _isSelfDestruct: 0
+    _specialFlags: 0
+  - _tankID: Tactical_Cannon
+    _tankName: Tactical Tank
+    _prefab: {fileID: 4470029899082457040, guid: 556f692262ed79f43882b2cd4f646a4b, type: 3}
+    _maxHP: 50
+    _maxMoveSpeed: 6
+    _weaponType: 1
+    _weaponFireRate: 5
+    _attackRange: 5
+    _behaviorType: 2
+    _rewardScore: 100
+    _isSelfDestruct: 0
+    _specialFlags: 0
