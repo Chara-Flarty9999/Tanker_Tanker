@@ -10,8 +10,8 @@ public class EnemyMovement : MonoBehaviour
     [SerializeField, Tooltip("移動先変更までの秒数")] float wanderTimer = 3f;
     float _timer;
 
-    [SerializeField] Transform _player; // プレイヤーのTransform
-    Transform _randomTarget;
+    Transform _player; // プレイヤーのTransform
+    [SerializeField] Transform _movementTarget;
     NavMeshAgent _navAgent;
 
     EnemyParam _param;
@@ -23,6 +23,7 @@ public class EnemyMovement : MonoBehaviour
     {
         _navAgent = GetComponent<NavMeshAgent>();
         _player = GameObject.FindWithTag("Player").transform;
+        //_movementTarget.SetParent(transform,true);
     }
 
     // Update is called once per frame
@@ -44,12 +45,22 @@ public class EnemyMovement : MonoBehaviour
                     // プレイヤーとの距離が攻撃範囲より大きい場合、近づく
                     targetPosition = _player.position;
                 }
-                else
+                else if (Vector3.Distance(transform.position, _player.transform.position) < _param.AttackRange - 10)
                 {
                     // プレイヤーとの距離が攻撃範囲以内の場合、後退する
                     targetPosition = transform.position - (_player.position - transform.position).normalized * Vector3.Distance(transform.position, _player.transform.position); // 後退する距離
                 }
-                _navAgent.SetDestination(targetPosition);
+                else
+                {
+                    int prob = UnityEngine.Random.Range(0, 100);
+                    if (prob <= 20)
+                    {
+                        int randomRotate = UnityEngine.Random.Range(-5, 5);
+                        _movementTarget.RotateAround(_player.position, Vector3.up,randomRotate);
+                        targetPosition = _movementTarget.position;
+                    }
+                }
+                    _navAgent.SetDestination(targetPosition);
                 break;
 
             case Enums.BehaviorType.Mouse:
