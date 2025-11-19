@@ -8370,7 +8370,7 @@ PrefabInstance:
       objectReference: {fileID: 1998973301}
     - target: {fileID: 214087355626630508, guid: 46900073924c66b4ca470fc2de0acb71, type: 3}
       propertyPath: m_VersionIndex
-      value: 3736
+      value: 3757
       objectReference: {fileID: 0}
     - target: {fileID: 1418971755205895247, guid: 46900073924c66b4ca470fc2de0acb71, type: 3}
       propertyPath: m_LocalPosition.x
@@ -8418,7 +8418,7 @@ PrefabInstance:
       objectReference: {fileID: 1045359207}
     - target: {fileID: 1427105172462098493, guid: 46900073924c66b4ca470fc2de0acb71, type: 3}
       propertyPath: m_VersionIndex
-      value: 3911
+      value: 3932
       objectReference: {fileID: 0}
     - target: {fileID: 1607954144512378812, guid: 46900073924c66b4ca470fc2de0acb71, type: 3}
       propertyPath: m_Mesh
@@ -8478,7 +8478,7 @@ PrefabInstance:
       objectReference: {fileID: 2145410311}
     - target: {fileID: 6807882345471365099, guid: 46900073924c66b4ca470fc2de0acb71, type: 3}
       propertyPath: m_VersionIndex
-      value: 3474
+      value: 3495
       objectReference: {fileID: 0}
     - target: {fileID: 6880604585361659622, guid: 46900073924c66b4ca470fc2de0acb71, type: 3}
       propertyPath: m_AnchorMax.x
@@ -8494,7 +8494,7 @@ PrefabInstance:
       objectReference: {fileID: 2125144409}
     - target: {fileID: 7173838954603687890, guid: 46900073924c66b4ca470fc2de0acb71, type: 3}
       propertyPath: m_VersionIndex
-      value: 1803
+      value: 1824
       objectReference: {fileID: 0}
     - target: {fileID: 7632533120190927587, guid: 46900073924c66b4ca470fc2de0acb71, type: 3}
       propertyPath: m_Mesh
@@ -8502,7 +8502,7 @@ PrefabInstance:
       objectReference: {fileID: 64898030}
     - target: {fileID: 7632533120190927587, guid: 46900073924c66b4ca470fc2de0acb71, type: 3}
       propertyPath: m_VersionIndex
-      value: 331
+      value: 352
       objectReference: {fileID: 0}
     - target: {fileID: 8343874777777904756, guid: 46900073924c66b4ca470fc2de0acb71, type: 3}
       propertyPath: _inputBuffer
@@ -47957,41 +47957,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fc24498b56c31634cb3709c69dcdf854, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _throwingObject: {fileID: 0}
-  _targetObject: {fileID: 0}
-  _projectileSpeed: 20
-  _turretMuzzle: {fileID: 0}
-  _turretBulletRate: 0
-  _highRange: 0
-  _turretRateTime: 0
-  _turretBase: {fileID: 0}
-  _turretBarrel: {fileID: 0}
-  _enemyBulletDirection: {x: 0, y: 0, z: 0}
-  _maxEnemyLife: 20
-  _enemyType: 0
-  _enemyLife: 0
-  rb: {fileID: 0}
-  mesh: {fileID: 0}
-  spriteRenderer: {fileID: 0}
-  _enemyLifeGage: {fileID: 0}
-  _enemyCanvas: {fileID: 0}
-  _gage_image: {fileID: 0}
-  _param:
-    _tankID: 
-    _tankName: 
-    _prefab: {fileID: 0}
-    _maxHP: 0
-    _maxMoveSpeed: 0
-    _weaponType: 0
-    _weaponFireRate: 0
-    _attackRange: 0
-    _behaviorType: 0
-    _rewardScore: 0
-    _isSelfDestruct: 0
-    _specialFlags: 0
-  _lineRenderer: {fileID: 0}
-  _resolution: 30
-  _timeStep: 0.1
 --- !u!136 &8620754765820736321
 CapsuleCollider:
   m_ObjectHideFlags: 0
