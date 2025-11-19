@@ -31,7 +31,7 @@ public class Inside_Explode_DamageHit : MonoBehaviour
         if (collision.gameObject.tag == "Player")
         {
             HealthManager playerHealth = collision.gameObject.GetComponent<HealthManager>();
-            playerHealth.TakeDamage(-25);
+            playerHealth.TakeDamage(-2);
         }
     }
     void AutoColliderDisable()

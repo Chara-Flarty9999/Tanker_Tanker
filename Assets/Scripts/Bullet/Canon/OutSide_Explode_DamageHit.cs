@@ -31,7 +31,7 @@ public class OutSide_Explode_DamageHit : MonoBehaviour
         {
             Debug.Log("‰´‚É“–‚½‚Á‚½‚Å");
             HealthManager playerHealth = collision.gameObject.GetComponent<HealthManager>();
-            playerHealth.TakeDamage(-5);
+            playerHealth.TakeDamage(-1);
         }
 
     }

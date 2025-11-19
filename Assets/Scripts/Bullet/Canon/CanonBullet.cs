@@ -35,7 +35,7 @@ public class CanonBullet : MonoBehaviour
 
     public bool m_play = true;
     [SerializeField] GameObject _explodeEffect;
-    GameObject[] _deleteExploEffect;
+    GameObject _deleteExploEffect;
 
     // Start is called before the first frame update
     public void Start()
@@ -63,19 +63,16 @@ public class CanonBullet : MonoBehaviour
         if (tagCheck != "Outside_Explode" && tagCheck != "Inside_Explode")
         {
             if (_explodeEffect)
-                Instantiate(_explodeEffect, transform.position, Quaternion.identity);
+                _deleteExploEffect = Instantiate(_explodeEffect, transform.position, Quaternion.identity);
 
             _rigidbody.linearVelocity = Vector3.zero;
             _rigidbody.useGravity = false;
             _collider.enabled = false;
             _mr.enabled = false;
-            _deleteExploEffect = GameObject.FindGameObjectsWithTag("Outside_Explode");
             AudioSource.PlayClipAtPoint(_explode, transform.position);
-            for (int i = 0; i < _deleteExploEffect.Length; i++)
-            {
-                Destroy(_deleteExploEffect[i], 1.8f);
-            }
-            Destroy(gameObject, 1.8f);
+
+            Destroy(_deleteExploEffect, 2.0f);
+            Destroy(gameObject, 2.0f);
         }
     }
 
