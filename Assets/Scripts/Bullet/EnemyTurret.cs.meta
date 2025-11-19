@@ -1,2 +1,17 @@
 fileFormatVersion: 2
 guid: 991592b96ee691145a3d88c2936e9314
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - _throwingObject: {fileID: 3253426651592162607, guid: 2403b12bcad92db4fa5f17ed96542efb, type: 3}
+  - _targetObject: {instanceID: 0}
+  - _turretMuzzle: {instanceID: 0}
+  - _turretBase: {instanceID: 0}
+  - _turretBarrel: {instanceID: 0}
+  - _lineRenderer: {instanceID: 0}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

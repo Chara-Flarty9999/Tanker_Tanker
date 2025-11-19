@@ -15,10 +15,10 @@ public class EnemyTurret : MonoBehaviour
     [SerializeField, Tooltip("標的のオブジェクトをここに割り当てる(Normal以外)")]
     private GameObject _targetObject;
 
-    [SerializeField, Tooltip("射出する速度(Turretのみ)")]
+    [SerializeField, Tooltip("射出する速度")]
     private float _projectileSpeed = 20f;
 
-    [SerializeField, Tooltip("射出する座標(Turretのみ)")]
+    [SerializeField, Tooltip("射出する座標")]
     private Transform _turretMuzzle;
 
     [SerializeField, Tooltip("弾を発射する間隔")]
