@@ -35295,6 +35295,7 @@ GameObject:
   - component: {fileID: 1806015748596027790}
   - component: {fileID: 4836658600802949157}
   - component: {fileID: 1739547845569665297}
+  - component: {fileID: 9022920406147115591}
   m_Layer: 0
   m_Name: EnemyAssultTank
   m_TagString: Enemy
@@ -35389,7 +35390,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   wanderRadius: 10
   wanderTimer: 3
-  _player: {fileID: 0}
+  _movementTarget: {fileID: 0}
 --- !u!65 &1739547845569665297
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -35411,6 +35412,33 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1.5, y: 1.5, z: 2}
   m_Center: {x: 0, y: 0.4, z: 0}
+--- !u!54 &9022920406147115591
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4470029899082457040}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &4565104153946162068
 GameObject:
   m_ObjectHideFlags: 0
@@ -36971,20 +36999,20 @@ MonoBehaviour:
   m_GameObject: {fileID: 6027871480310661117}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fc24498b56c31634cb3709c69dcdf854, type: 3}
+  m_Script: {fileID: 11500000, guid: 991592b96ee691145a3d88c2936e9314, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _throwingObject: {fileID: 3253426651592162607, guid: 2403b12bcad92db4fa5f17ed96542efb, type: 3}
+  _throwingObject: {fileID: 0}
   _targetObject: {fileID: 0}
   _projectileSpeed: 20
-  _turretMuzzle: {fileID: 2249639461562645656}
+  _turretMuzzle: {fileID: 0}
   _turretBulletRate: 0
   _highRange: 0
-  _turretBase: {fileID: 3410037685227156860}
-  _turretBarrel: {fileID: 693160353063772939}
+  _turretBase: {fileID: 0}
+  _turretBarrel: {fileID: 0}
   _maxEnemyLife: 20
   _enemyType: 0
-  _lineRenderer: {fileID: 3405751448246198779}
+  _lineRenderer: {fileID: 0}
   _resolution: 30
   _timeStep: 0.1
 --- !u!120 &3405751448246198779
@@ -39722,10 +39750,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 8732482420652345744}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b18595e9334ff3b4c8b81df8203849af, type: 3}
+  m_Script: {fileID: 11500000, guid: 4d596bf515c2bab4e90c00e281bb99eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _target: {fileID: 0}
+  _healthManager: {fileID: 1806015748596027790}
+  _hpBarRoot: {fileID: 8732482420652345744}
+  _hpSlider: {fileID: 5737665287827621816}
 --- !u!223 &5465415200298673513
 Canvas:
   m_ObjectHideFlags: 0
