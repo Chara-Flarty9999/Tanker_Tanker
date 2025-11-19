@@ -6,7 +6,7 @@ public class EnemyHealthUI : MonoBehaviour
     [SerializeField] private HealthManager _healthManager;
     [SerializeField] private GameObject _hpBarRoot; // Canvas付きのオブジェクト
     [SerializeField] private Slider _hpSlider;
-    [SerializeField] private Transform _target = default;
+    private Transform _target = default;
 
     private void Start()
     {
