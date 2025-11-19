@@ -28,7 +28,7 @@ public class EnemyHealthUI : MonoBehaviour
     {
         _hpSlider.maxValue = max;
         _hpBarRoot.SetActive(true); // UŒ‚‚ğó‚¯‚½‚ç•\¦
-        _hpSlider.value = (float)current / max;
+        _hpSlider.value = (float)current;
     }
 
     private void HandleDeath()
