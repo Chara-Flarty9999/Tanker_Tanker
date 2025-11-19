@@ -15,7 +15,7 @@ public class PlayerHealthUI : MonoBehaviour
     private void UpdateUI(int current, int max)
     {
         hpSlider.maxValue = max;
-        hpSlider.value = (float)current / max;
+        hpSlider.value = current;
     }
 
     private void GameOver()
