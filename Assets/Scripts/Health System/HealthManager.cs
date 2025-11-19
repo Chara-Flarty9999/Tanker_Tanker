@@ -21,10 +21,10 @@ public class HealthManager : MonoBehaviour
 
     public void TakeDamage(int amount)
     {
-        Debug.Log("Damaged");
-        _currentHP -= amount;
+        Debug.Log($"HP:{ _currentHP}");
+        _currentHP += amount;
         if (_currentHP < 0) _currentHP = 0;
-
+        Debug.Log("Damaged : " + amount);
         OnHealthChanged.Invoke(_currentHP, _maxHP);
 
         if (_currentHP == 0)
