@@ -72,7 +72,7 @@ public class PlayerTullet : MonoBehaviour
     {
         _turretBase.transform.localRotation = Quaternion.Euler(0, _turretBase.transform.localRotation.eulerAngles.y + _inputBuffer.inputReticleHorizontal * _reticleSensitivity, 0);
 
-        float barrelAngle = Mathf.Clamp(_turretBarrel.transform.localRotation.eulerAngles.x + _inputBuffer.inputReticleVertical * _reticleSensitivity, 0, 150);
+        float barrelAngle = Mathf.Clamp(_turretBarrel.transform.localRotation.eulerAngles.x + _inputBuffer.inputReticleVertical * _reticleSensitivity, 0, 45);
 
         _turretBarrel.transform.localRotation =
             Quaternion.Euler(barrelAngle, 0, 0);
@@ -136,19 +136,6 @@ public class PlayerTullet : MonoBehaviour
     {
         GameManager.leftEnemyBox--;
     }
-    /// <summary>
-    /// ìGÇÃèÛë‘(ìGéÌóﬁ)
-    /// </summary>
-    enum EnemyType
-    {
-        Object,
-        Turret,
-        Wander,
-        chase
-    }
-
-
-
 
     #region Ballistic/Liner
 
