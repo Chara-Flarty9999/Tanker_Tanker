@@ -6,12 +6,19 @@ public class ScoreText : MonoBehaviour
 {
     [SerializeField]TextMeshProUGUI _scoreText;
     int _score;
-    public int Score { set { _score = Score; ScoreUpdate(_score); }  get { return _score; } }
+    public int AddScore
+    {
+        set
+        {
+            _score += value;
+            ScoreUpdate(_score);
+        }
+    }
+    public int Score => _score;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        _score = 0;
         _scoreText.text = $"Score:{_score.ToString("D6")}";
     }
 
@@ -25,6 +32,7 @@ public class ScoreText : MonoBehaviour
     {
         if (_scoreText != null)
         {
+            Debug.Log($"Score Updated: {score}");
             _scoreText.text = $"Score:{score.ToString("D6")}";
         }
     }
