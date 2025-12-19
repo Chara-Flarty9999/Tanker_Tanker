@@ -8,8 +8,10 @@ using UnityEngine.Events;
 public class HealthManager : MonoBehaviour
 {
     EnemyParam _param;
-    [SerializeField] int _maxHP = 100;
+    [SerializeField] int _maxHP = 50;
     int _currentHP;
+    public int CurrentHP => _currentHP;
+    bool _isDead = false;
 
     public UnityEvent<int, int> OnHealthChanged; // (current, max)
     public UnityEvent OnDeath;
@@ -21,14 +23,14 @@ public class HealthManager : MonoBehaviour
 
     public void TakeDamage(int amount)
     {
-        Debug.Log($"HP:{ _currentHP}");
+        Debug.Log($"{amount}‚Ìƒ_ƒ[ƒW‚ğó‚¯‚½");
         _currentHP += amount;
         if (_currentHP < 0) _currentHP = 0;
-        Debug.Log("Damaged : " + amount);
         OnHealthChanged.Invoke(_currentHP, _maxHP);
-
-        if (_currentHP == 0)
+        Debug.Log($"Œ»İ‚ÌHP: {_currentHP}/{_maxHP}");
+        if (_currentHP == 0 && !_isDead)
         {
+            _isDead = true;
             OnDeath.Invoke();
         }
     }
@@ -43,6 +45,7 @@ public class HealthManager : MonoBehaviour
     {
         _param = enemyParam;
         _maxHP = _param.MaxHP;
+        _currentHP = _maxHP;
     }
     // Update is called once per frame
     void Update()
