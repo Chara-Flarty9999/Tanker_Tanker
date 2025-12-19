@@ -58,7 +58,6 @@ public class CanonBullet : MonoBehaviour
     }
     private void OnTriggerEnter(Collider collision)
     {
-        Debug.Log("Hit : " +  collision.gameObject.name);
         string tagCheck = collision.gameObject.tag;
         if (tagCheck != "Outside_Explode" && tagCheck != "Inside_Explode")
         {
