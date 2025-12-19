@@ -8,6 +8,7 @@ TagManager:
   - Outside_Explode
   - Inside_Explode
   - Enemy
+  - ScoreUI
   layers:
   - Default
   - TransparentFX
