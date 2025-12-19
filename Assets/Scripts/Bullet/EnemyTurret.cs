@@ -135,29 +135,8 @@ public class EnemyTurret : MonoBehaviour
 
         // direction (XZ plane)
         Vector3 dir = toTargetXZ.normalized;
-
-        Debug.DrawRay(origin, dir, Color.yellow, 2f);
-
         velocity = dir * -1 * speed * Mathf.Cos(angle) + Vector3.up * speed * Mathf.Sin(angle);
-
-        Debug.DrawRay(origin, velocity, Color.cyan, 2f);
         return true;
-    }
-
-    public void DealDamage_Heal(int change_HP)
-    {
-        _enemyCanvas?.SetActive(true);
-        _enemyLife += change_HP;
-        _gage_image.fillAmount = _enemyLife / _maxEnemyLife;
-        //mesh.material.color = change_HP >= 0 ? new Color(0, 1, 0, 1) : new Color(1, 0, 0, 1);
-        if (_enemyLife <= 0)
-        {
-            Destroy(gameObject, 1f);
-        }
-        else
-        {
-            //mesh.material.DOColor(new Color(1, 1, 1), 0.8f);
-        }
     }
 
     /// <summary>
@@ -170,7 +149,7 @@ public class EnemyTurret : MonoBehaviour
             // Ballオブジェクトの生成
             GameObject ball = Instantiate(_throwingObject, _turretMuzzle.position, Quaternion.identity);
             Collider collider = ball.GetComponent<SphereCollider>();
-            StartCoroutine(SwitchTrigger(0.25f,collider));
+            StartCoroutine(SwitchTrigger(0.1f,collider));
             // 射出
             Rigidbody rid = ball.GetComponent<Rigidbody>();
             rid.linearVelocity = shootVector;
@@ -182,10 +161,7 @@ public class EnemyTurret : MonoBehaviour
 
         }
     }
-    private void OnDestroy()
-    {
-        GameManager.leftEnemyBox--;
-    }
+
     public void Initialize(EnemyParam enemyParam)
     {
         _param = enemyParam;
