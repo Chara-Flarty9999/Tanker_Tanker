@@ -9,7 +9,7 @@ public class OutSide_Explode_DamageHit : MonoBehaviour
     void Start()
     {
         _collider = GetComponent<Collider>();
-        Invoke("AutoColliderDisable", 0.5f);
+        Invoke("AutoColliderDisable", 0.1f);
     }
 
     // Update is called once per frame
@@ -20,12 +20,14 @@ public class OutSide_Explode_DamageHit : MonoBehaviour
 
     private void OnTriggerEnter(Collider collision)
     {
-        Debug.Log("Collision with: " + collision.gameObject.name);
         if (collision.gameObject.tag == "Enemy")
         {
             Debug.Log("“G‚É“–‚½‚Á‚½‚Å");
             HealthManager enemyHealth = collision.gameObject.GetComponent<HealthManager>();
-            enemyHealth.TakeDamage(-5);
+            if (enemyHealth.CurrentHP >= 0)
+            {
+                enemyHealth.TakeDamage(-5);
+            }
         }
         if (collision.gameObject.tag == "Player")
         {
