@@ -1,4 +1,4 @@
-using DG.Tweening;
+/*using DG.Tweening;
 using System.Collections;
 using TMPro;
 using UnityEngine;
@@ -72,30 +72,6 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.LeftShift))
-        {
-            audioSource.PlayOneShot(typeChangeSound);
-            if (bulletType == BulletType.Explode)
-            {
-                bulletType = BulletType.Normal;
-            }
-            else
-            {
-                bulletType++;
-            }
-        }
-        switch (bulletType)
-        {
-            case BulletType.Normal:
-                BulletTypeImage.color = new Color(1, 1, 1, 1);
-                break;
-            case BulletType.Penetration:
-                BulletTypeImage.color = new Color(0.2f, 0.4f, 1, 1);
-                break;
-            case BulletType.Explode:
-                BulletTypeImage.color = new Color(1, 0.4f, 0.2f, 1);
-                break;
-        }
         if (!cleared)
         {
             time += Time.deltaTime;
@@ -113,25 +89,6 @@ public class GameManager : MonoBehaviour
             Button.SetActive(true);
             StartCoroutine("BackToTitle");
         }
-    }
-
-    public void GetDamage_Heal(int change_HP)
-    {
-        HP += change_HP;
-        characterImage.color = change_HP >= 0 ? new Color(0, 1, 0, 1) : new Color(1, 0, 0, 1);
-        if (HP > MaxHP) { HP = MaxHP; }
-        lifeImage.fillAmount = HP / MaxHP;
-        characterImage.DOColor(new Color(1, 1, 1), 0.8f);
-    }
-
-    public void BulletShoot()
-    {
-        GameObject bullet = bulletType switch
-        {
-
-        };
-
-        Instantiate(bullet, new Vector3(spawner.transform.position.x, spawner.transform.position.y, spawner.transform.position.z), Quaternion.identity);
     }
 
     IEnumerator FadeIn()
@@ -169,3 +126,4 @@ public class GameManager : MonoBehaviour
         Explode
     }
 }
+*/

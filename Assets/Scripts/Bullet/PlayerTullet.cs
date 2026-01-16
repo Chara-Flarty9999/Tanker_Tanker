@@ -128,11 +128,6 @@ public class PlayerTullet : MonoBehaviour
         collider.enabled = true;
     }
 
-    private void OnDestroy()
-    {
-        GameManager.leftEnemyBox--;
-    }
-
     #region Ballistic/Liner
 
     [Header("’e“¹•\Ž¦")]
