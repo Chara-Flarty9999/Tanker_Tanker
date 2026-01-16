@@ -13,5 +13,11 @@ MonoBehaviour:
   m_Name: 1-1-1
   m_EditorClassIdentifier: 
   SpawnParamList:
-  - spawnTankID: Tactical_Cannon
+  - spawnTankID: Tank_001
+    spawnArea: {x: 5, y: 0, z: 0}
+  - spawnTankID: 
+    spawnArea: {x: 0, y: 0, z: 0}
+  - spawnTankID: Tank_001
+    spawnArea: {x: -5, y: 0, z: 0}
+  - spawnTankID: 
     spawnArea: {x: 0, y: 0, z: 0}
