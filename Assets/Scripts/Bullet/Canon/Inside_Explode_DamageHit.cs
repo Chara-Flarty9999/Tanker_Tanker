@@ -22,20 +22,23 @@ public class Inside_Explode_DamageHit : MonoBehaviour
 
     private void OnTriggerEnter(Collider collision)
     {
-
-        if (collision.gameObject.tag == "Enemy")
+        switch (collision.gameObject.tag)
         {
-            HealthManager enemyHealth = collision.gameObject.GetComponent<HealthManager>();
-            if (enemyHealth.CurrentHP >= 0)
-            {
-                enemyHealth.TakeDamage(-25);
-            }
-
-        }
-        if (collision.gameObject.tag == "Player")
-        {
-            HealthManager playerHealth = collision.gameObject.GetComponent<HealthManager>();
-            playerHealth.TakeDamage(-2);
+            case "Enemy":
+                HealthManager enemyHealth = collision.gameObject.GetComponent<HealthManager>();
+                Debug.Log($"残りHPは{enemyHealth.CurrentHP}やで: ダメージ判定君");
+                if (enemyHealth.CurrentHP >= 0)
+                {
+                    enemyHealth.TakeDamage(-25);
+                }
+                break;
+            case "Player":
+                HealthManager playerHealth = collision.gameObject.GetComponent<HealthManager>();
+                playerHealth.TakeDamage(-2);
+                break;
+            default:
+                Debug.Log("多分地面とか");
+                break;
         }
     }
     void AutoColliderDisable()
