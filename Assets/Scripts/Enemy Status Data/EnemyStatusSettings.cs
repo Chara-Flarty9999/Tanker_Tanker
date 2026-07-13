@@ -51,23 +51,20 @@ public class EnemyParam
 
     public void GenerateID()
     {
-        string id = _behaviorType.ToString();
+        GenerateID(0);
+    }
 
-        if (_isSelfDestruct)
-            id += "_Crush";
-
-        if (_specialFlags != SpecialFlags.None)
+    /// <summary>
+    /// Generate ID. If index &gt; 0, ID will be numbered as "Tank_001" etc.
+    /// If index == 0, fallback to previous naming scheme.
+    /// </summary>
+    public void GenerateID(int index)
+    {
+        if (index > 0)
         {
-            string flags = string.Join("_",
-                _specialFlags.ToString().Split(new[] { ',' }, System.StringSplitOptions.RemoveEmptyEntries)
-            ).Replace(" ", "");
-            id += "_" + flags;
+            _tankID = $"Tank_{index:000}";
+            return;
         }
-
-        if (_weaponType != WeaponType.None)
-            id += "_" + _weaponType.ToString();
-
-        _tankID = id;
     }
 }
 
